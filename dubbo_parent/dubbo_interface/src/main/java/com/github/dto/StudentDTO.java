@@ -1,8 +1,13 @@
 package com.github.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class StudentDTO {
 	
-	private String name;
+	@NotNull // 不允许为空
+    @Size(min = 1, max = 20) // 长度或大小范围
+    private String name;
 	
 	private String stuNo;
 

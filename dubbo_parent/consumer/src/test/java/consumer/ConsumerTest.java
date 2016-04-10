@@ -2,6 +2,7 @@ package consumer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -22,7 +23,9 @@ import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.rpc.RpcContext;
 import com.github.dto.StudentDTO;
 import com.github.dto.UserDTO;
+import com.github.dto.ValidationDTO;
 import com.github.listener.CallBackListener;
+import com.github.rest.MyValidationService;
 import com.github.rest.StudentService;
 import com.github.service.AnimalService;
 import com.github.service.UserService;
@@ -236,7 +239,7 @@ public class ConsumerTest {
 		context.start();
 		StudentService service = (StudentService) context.getBean("studentService");
 		service.registerUser(dto);
-		System.in.read();
+//		System.in.read();
 	}
 	
 	
@@ -249,7 +252,7 @@ public class ConsumerTest {
 		dto.setName("zhangsan");
 		dto.setStuNo("123456");
         Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("http://172.16.153.156:30000/service/student/register");
+        WebTarget target = client.target("http://192.168.99.159:30001/service/student/register");
         Response response = target.request().post(Entity.entity(dto, MediaType.APPLICATION_JSON_TYPE));
         try {
             if (response.getStatus() != 200) {
@@ -261,5 +264,56 @@ public class ConsumerTest {
             client.close();
         }
 	}
+	
+	/**
+	 * 调用rest(三)
+	 * 校验
+	 */
+	@Test
+	public void restful3(){
+		ValidationDTO dto = new ValidationDTO();
+		dto.setAge(18);
+		dto.setEmail("aaa");
+//		dto.setExpiryDate(new Date());
+		dto.setName("yzw");
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("http://192.168.99.159:30001/service/validate/save");
+        Response response = target.request().post(Entity.entity(dto, MediaType.APPLICATION_JSON_TYPE));
+        try {
+            if (response.getStatus() != 200) {
+                throw new RuntimeException("Failed with HTTP error code : " + response.getStatus());
+            }
+            System.out.println("Successfully got result: " + response.readEntity(String.class));
+        }catch (Exception e) {
+        	e.printStackTrace();
+        } finally {
+            response.close();
+            client.close();
+        }
+	}
 
+	/**
+	 * 调用dubbo RPC(四)
+	 * @throws IOException 
+	 */
+	@Test
+	public void restful4() throws IOException{
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
+				"rest_consumer.xml");
+		ValidationDTO dto = new ValidationDTO();
+		dto.setAge(18);
+		dto.setEmail("aaa");
+//		dto.setExpiryDate(new Date());
+		dto.setName("yzw");
+		MyValidationService service = (MyValidationService) context.getBean("validate");
+		try {
+			service.save(dto);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+//		System.in.read();
+
+	}
+	
 }

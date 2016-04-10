@@ -9,7 +9,7 @@
 	<artifactId>dubbo_interface</artifactId>
 	<packaging>jar</packaging>
 	<name>dubbo_interface</name>
-	<url>http://nexus.hrbbwx.com/nexus/content/repositories/central</url>
+
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
