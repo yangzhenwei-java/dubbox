@@ -15,4 +15,5 @@
 	<dubbo:reference id="studentService" interface="com.github.rest.StudentService"
 		cluster="failsafe" retries="2" />
 	<dubbo:reference id="validate" interface="com.github.rest.MyValidationService" />
+	<dubbo:reference id="baseProvider" interface="com.github.service.BaseProviderService" />
 </beans>

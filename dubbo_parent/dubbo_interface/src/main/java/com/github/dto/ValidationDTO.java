@@ -19,6 +19,7 @@ public class ValidationDTO{
     private String name;
  
 //    @NotNull(groups = MyValidationService.Save.class) // 保存时不允许为空，更新时允许为空 ，表示不更新该字段
+	
     @Pattern(regexp = "^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$")
     private String email;
  

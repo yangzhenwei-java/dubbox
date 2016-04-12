@@ -52,6 +52,9 @@
 			<artifactId>javax.ws.rs-api</artifactId>
 		</dependency>
 
+
+
+
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxrs</artifactId>

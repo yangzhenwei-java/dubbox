@@ -28,6 +28,7 @@ import com.github.listener.CallBackListener;
 import com.github.rest.MyValidationService;
 import com.github.rest.StudentService;
 import com.github.service.AnimalService;
+import com.github.service.BaseProviderService;
 import com.github.service.UserService;
 
 public class ConsumerTest {
@@ -252,7 +253,7 @@ public class ConsumerTest {
 		dto.setName("zhangsan");
 		dto.setStuNo("123456");
         Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("http://192.168.99.159:30001/service/student/register");
+        WebTarget target = client.target("http://172.16.156.38:30001/service/student/register");
         Response response = target.request().post(Entity.entity(dto, MediaType.APPLICATION_JSON_TYPE));
         try {
             if (response.getStatus() != 200) {
@@ -315,5 +316,70 @@ public class ConsumerTest {
 //		System.in.read();
 
 	}
+	
+	/**
+	 * 调用rest(五)
+	 */
+	@Test
+	public void restful5(){
+
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("http://172.16.156.38:8080/base/dubbo/18.json");
+        Response response = target.request().get();
+        try {
+            if (response.getStatus() != 200) {
+                throw new RuntimeException("Failed with HTTP error code : " + response.getStatus());
+            }
+            System.out.println("Successfully got result: " + response.readEntity(String.class));
+        } catch(Exception e){
+        	e.printStackTrace();
+        }finally {
+            response.close();
+            client.close();
+        }
+	}
+	
+	
+	/**
+	 * 调用rest(六)
+	 */
+	@Test
+	public void restful6(){
+		StudentDTO dto = new StudentDTO();
+		dto.setName("zhangsan");
+		dto.setStuNo("123456");
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("http://172.16.156.38:8080/base/dubbo/register");
+        Response response = target.request().post(Entity.entity(dto, MediaType.APPLICATION_JSON_TYPE));
+        try {
+            if (response.getStatus() != 200) {
+                throw new RuntimeException("Failed with HTTP error code : " + response.getStatus());
+            }
+            System.out.println("Successfully got result: " + response.readEntity(String.class));
+        }catch(Exception e){
+        	e.printStackTrace();
+        } finally {
+            response.close();
+            client.close();
+        }
+	}
+	
+	/**
+	 * 调用rest(六)
+	 */
+	@Test
+	public void restful7(){
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
+				"rest_consumer.xml");
+		context.start();
+		StudentDTO dto = new StudentDTO();
+		dto.setName("zhangsan");
+		dto.setStuNo("123456");
+
+
+		BaseProviderService bean =(BaseProviderService) context.getBean("baseProvider");
+		bean.registerUser(dto);;
+	}
+
 	
 }

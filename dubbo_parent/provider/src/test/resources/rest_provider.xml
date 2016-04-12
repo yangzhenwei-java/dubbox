@@ -11,10 +11,11 @@
 	<dubbo:registry address="${zookeeper.address}" />
 	<dubbo:monitor protocol="registry" />
 	<dubbo:protocol name="rest" port="30001" host="${host}"
-		contextpath="service" server="jetty" />
+		contextpath="service" server="jetty"
+		extension="com.github.extension.ClientSecurityFilter,com.github.extension.ServerSecurityFilter" />
 	<!-- 提供rest服务 -->
 	<dubbo:service interface="com.github.rest.StudentService"
-		ref="studentServiceImpl" validation="true"/>
+		ref="studentServiceImpl" validation="true" />
 	<bean id="studentServiceImpl" class="com.github.impl.StudentServiceImpl" />
 
 	<!-- 提供rest服务并校验 -->
